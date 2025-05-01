@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from .tasks import send_follow_notification
 
 from .models import Follow
 from .serializers import FollowSerializer, UserSerializer
@@ -18,17 +19,27 @@ class FollowUnfollowView(APIView):
                 {'detail': 'You cannot follow yourself.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        # Check if the user exists
         target = generics.get_object_or_404(User, pk=user_id)
+
+        # Check if the user is already followed
         follow, created = Follow.objects.get_or_create(
             user=request.user,
             following=target
         )
-        if not created:
-            return Response(
-                {'detail': 'You are already following this user.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        return Response(FollowSerializer(follow).data, status=status.HTTP_201_CREATED)
+        
+        if created:
+            # Send notification to the target user
+            send_follow_notification.delay(request.user.id, target.id)
+            # Return the follow object
+            return Response(FollowSerializer(follow).data,
+                            status=status.HTTP_201_CREATED)
+
+        # if the follow already exists, return a 400 error with a message
+        return Response(
+            {'detail': 'You are already following this user.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     def delete(self, request, user_id):
         follow = Follow.objects.filter(
