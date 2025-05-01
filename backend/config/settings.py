@@ -69,12 +69,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     'minitwitter',
-        'USER':     'minitwitter_user',
-        'PASSWORD': 'minitwitter_password',
-        'HOST':     'db',
-        'PORT':     '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'minitwitter'),
+        'USER': os.environ.get('POSTGRES_USER', 'minitwitter_user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'minitwitter_password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 

@@ -11,6 +11,12 @@ on:
 jobs:
   test-backend:
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: minitwitter
+      POSTGRES_USER: minitwitter_user
+      POSTGRES_PASSWORD: minitwitter_password
+      POSTGRES_PORT: 5432
     services:
       db:
         image: postgres:15
