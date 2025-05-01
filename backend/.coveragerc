@@ -1,0 +1,19 @@
+[run]
+branch = True
+source = apps
+
+[paths]
+source =
+    .
+    /workspaces/minitwitter/backend
+
+[report]
+omit =
+    */migrations/*
+    */tests.py
+    config/*
+    manage.py
+    */apps/__init__.py
+
+[html]
+directory = coverage_html_report
