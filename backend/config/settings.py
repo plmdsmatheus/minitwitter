@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -165,8 +166,14 @@ SPECTACULAR_SETTINGS = {
 }
 
 # Celery settings
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+
 CELERY_BROKER_URL    = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+CELERY_TASK_ALWAYS_EAGER = 'test' in sys.argv
+CELERY_TASK_EAGER_PROPAGATES = True
