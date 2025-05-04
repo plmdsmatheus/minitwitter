@@ -2,6 +2,13 @@
 
 A simple Twitter-like social network with a Django/DRF backend.
 
+## Diagrams
+### ER Diagram
+![ER DIAGRAM](MiniTwitter.png)
+
+### Architecture Diagram
+![ARCHITETURE DIAGRAM](MiniTwitter_Architecture_Diagram.png)
+
 ## Table of Contents
 
 * [Features](#features)
